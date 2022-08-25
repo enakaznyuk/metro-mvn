@@ -1,7 +1,5 @@
 out/
 logs/
-target/
-src/test/
 .idea/
 .idea_modules/
 *.iml
