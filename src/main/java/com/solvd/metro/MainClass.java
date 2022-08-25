@@ -19,10 +19,6 @@ import org.apache.logging.log4j.Logger;
 
 public class MainClass {
 
-    /*static {
-        System.setProperty("log4j.configurationFile", "log4j2.xml");
-    }*/
-
     private static final Logger LOGGER = LogManager.getLogger(MainClass.class);
 
     public static void main(String[] args) {
@@ -124,20 +120,3 @@ public class MainClass {
         }
     }
 }
-
-/*
-<build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>16</source>
-                    <target>16</target>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-*/

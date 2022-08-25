@@ -1,15 +1,15 @@
-2022-08-25 11:12:00.093 [main] INFO  com.solvd.metro.MainClass - Hello world
-2022-08-25 11:12:00.102 [main] INFO  com.solvd.metro.PassengerFlowCalculation - Machinist{ Full Name = Ivan Drozd } works at Nemiga
-2022-08-25 11:12:00.102 [main] INFO  com.solvd.metro.PassengerFlowCalculation - 123 does not working at Proletarskaya
-2022-08-25 11:12:00.103 [main] INFO  com.solvd.metro.PassengerFlowCalculation - Ivan	Shtadler	Shtadler
-2022-08-25 11:12:00.106 [main] INFO  com.solvd.metro.PassengerFlowCalculation - you need 5 trains for 500 passangers
-2022-08-25 11:12:00.107 [main] INFO  com.solvd.metro.equip.EquipForCleaner - Nikolay use Mop
-2022-08-25 11:12:00.107 [main] INFO  com.solvd.metro.equip.EquipForCleaner - Nikolay use Overalls
-2022-08-25 11:12:00.108 [main] INFO  com.solvd.metro.PassengerFlowCalculation - Hashcode machinist 1 = 
-2022-08-25 11:12:00.109 [main] INFO  com.solvd.metro.PassengerFlowCalculation - -639411390_______-938631064
-2022-08-25 11:12:00.109 [main] INFO  com.solvd.metro.PassengerFlowCalculation - First Name = Ivan
-2022-08-25 11:12:00.110 [main] INFO  com.solvd.metro.PassengerFlowCalculation - Last Name =  Drozd
-2022-08-25 11:12:00.111 [main] INFO  com.solvd.metro.profession.Machinist - Ivan salary per month = 825.0$
-2022-08-25 11:12:00.111 [main] INFO  com.solvd.metro.MainClass - Operation end!
-2022-08-25 11:12:00.112 [main] INFO  com.solvd.metro.ClassForTryCatch - doSmth in try-with-resources
-2022-08-25 11:12:00.112 [main] INFO  com.solvd.metro.ClassForTryCatch - Close ClassForTryCatch!
+2022-08-25 14:39:36.908 [main] INFO  com.solvd.metro.MainClass - Hello world
+2022-08-25 14:39:36.918 [main] INFO  com.solvd.metro.PassengerFlowCalculation - Machinist{ Full Name = Ivan Drozd } works at Nemiga
+2022-08-25 14:39:36.918 [main] INFO  com.solvd.metro.PassengerFlowCalculation - 123 does not working at Proletarskaya
+2022-08-25 14:39:36.919 [main] INFO  com.solvd.metro.PassengerFlowCalculation - Ivan	Shtadler	Shtadler
+2022-08-25 14:39:36.923 [main] INFO  com.solvd.metro.PassengerFlowCalculation - you need 5 trains for 500 passangers
+2022-08-25 14:39:36.924 [main] INFO  com.solvd.metro.equip.EquipForCleaner - Nikolay use Mop
+2022-08-25 14:39:36.924 [main] INFO  com.solvd.metro.equip.EquipForCleaner - Nikolay use Overalls
+2022-08-25 14:39:36.924 [main] INFO  com.solvd.metro.PassengerFlowCalculation - Hashcode machinist 1 = 
+2022-08-25 14:39:36.926 [main] INFO  com.solvd.metro.PassengerFlowCalculation - -639411390_______-938631064
+2022-08-25 14:39:36.926 [main] INFO  com.solvd.metro.PassengerFlowCalculation - First Name = Ivan
+2022-08-25 14:39:36.926 [main] INFO  com.solvd.metro.PassengerFlowCalculation - Last Name =  Drozd
+2022-08-25 14:39:36.928 [main] INFO  com.solvd.metro.profession.Machinist - Ivan salary per month = 825.0$
+2022-08-25 14:39:36.929 [main] INFO  com.solvd.metro.MainClass - Operation end!
+2022-08-25 14:39:36.929 [main] INFO  com.solvd.metro.ClassForTryCatch - doSmth in try-with-resources
+2022-08-25 14:39:36.929 [main] INFO  com.solvd.metro.ClassForTryCatch - Close ClassForTryCatch!
