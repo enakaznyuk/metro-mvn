@@ -99,4 +99,27 @@ public class PassengerFlowCalculation {
         LOGGER.info("First Name = " + human.getFirstName());
         LOGGER.info("Last Name =  " + human.getLastName());
     }
+
+    public static void retired(Employee employee){
+        switch (employee.getGender()) {
+            case MALE -> LOGGER.info("He can retire at 65 years.");
+            case FEMALE -> LOGGER.info("She can retire at 60 years.");
+            default -> {
+            }
+        }
+    }
+
+    public static void weekend(Employee employee){
+        switch (employee.getWeekDay()) {
+            case MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY -> LOGGER.info(employee.getFirstName() + " work on " + employee.getWeekDay().getDay());
+            case SATURDAY, SUNDAY -> LOGGER.info(employee.getFirstName() + " weekend on " + employee.getWeekDay().getDay());
+        }
+    }
+
+    public static void stationType(Station station){
+        switch (station.getLocation()){
+            case GROUND -> LOGGER.info("Ground station");
+            case UNDERGROUND -> LOGGER.info("Underground station");
+        }
+    }
 }

@@ -16,8 +16,8 @@ public class Machinist extends Employee {
     private String companyAddress;
     private Train<?> train;
 
-    public Machinist(String firstName, String lastName, String profession) {
-        super(firstName, lastName, profession);
+    public Machinist(String firstName, String lastName, String profession, Gender gender) {
+        super(firstName, lastName, profession, gender);
     }
 
     public String toString() {

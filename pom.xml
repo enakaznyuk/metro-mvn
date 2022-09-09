@@ -12,6 +12,8 @@
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
         <logger-version>2.18.0</logger-version>
+        <apache-commons-lang3-version>3.12.0</apache-commons-lang3-version>
+        <apache-commons-io-version>2.11.0</apache-commons-io-version>
     </properties>
 
     <dependencies>
@@ -25,6 +27,17 @@
             <artifactId>log4j-api</artifactId>
             <version>${logger-version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${apache-commons-lang3-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${apache-commons-io-version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

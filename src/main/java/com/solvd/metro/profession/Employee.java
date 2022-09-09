@@ -19,14 +19,43 @@ public abstract class Employee extends Human implements ISalary, ISick, IWork<Em
     private BigDecimal pay;
     private BigInteger vacationSickDays;
     private String holiday;
+    private WeekDay weekDay;
 
-    public Employee(String firstName, String secondName, String profession) {
-        super(firstName, secondName);
+    public Employee(String firstName, String secondName, String profession, Gender gender) {
+        super(firstName, secondName, gender);
         this.profession = profession;
 
         if (!firstName.matches("^\\D*$")) {
             throw new InvalidNameException("name must not contain numbers");
         }
+    }
+
+    public enum WeekDay{
+        SUNDAY ("Воскресенье"),
+        MONDAY ("Понедельник"),
+        TUESDAY ("Вторник"),
+        WEDNESDAY ("Среда"),
+        THURSDAY ("Четверг"),
+        FRIDAY ("Пятница"),
+        SATURDAY ("Суббота");
+
+        private String day;
+
+        WeekDay(String day) {
+            this.day = day;
+        }
+
+        public String getDay() {
+            return day;
+        }
+    }
+
+    public WeekDay getWeekDay() {
+        return weekDay;
+    }
+
+    public void setWeekDay(WeekDay weekDay) {
+        this.weekDay = weekDay;
     }
 
     public abstract void getSalary(Employee employee) throws InvalidSalaryException;

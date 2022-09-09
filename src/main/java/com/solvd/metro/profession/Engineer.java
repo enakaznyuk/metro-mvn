@@ -18,8 +18,8 @@ public class Engineer extends Employee {
     private String companyAddress;
     private List<Equip> equips;
 
-    public Engineer(String firstName, String lastName, String profession) {
-        super(firstName, lastName, profession);
+    public Engineer(String firstName, String lastName, String profession, Gender gender) {
+        super(firstName, lastName, profession, gender);
     }
 
     public String toString() {

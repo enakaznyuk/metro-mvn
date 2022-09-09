@@ -16,14 +16,20 @@ public class Station implements IMajorRenovation, IWork<Station> {
 
     private LocalDate dateBasis;
     private String name;
+    private Location location;
     private Map<Integer, Employee> employees;
 
-    public Station(String name, LocalDate dateBasis) {
+    public Station(String name, LocalDate dateBasis, Location location) {
         this.name = name;
         this.dateBasis = dateBasis;
+        this.location = location;
         if (dateBasis.getYear() < 1980) {
             throw new InvalidDataException("Date must be > 1980!");
         }
+    }
+
+    public enum Location{
+        UNDERGROUND, GROUND;
     }
 
     public void getDateMajorRenovation(Station station) {
@@ -56,5 +62,9 @@ public class Station implements IMajorRenovation, IWork<Station> {
 
     public LocalDate getDateBasis() {
         return dateBasis;
+    }
+
+    public Location getLocation() {
+        return location;
     }
 }

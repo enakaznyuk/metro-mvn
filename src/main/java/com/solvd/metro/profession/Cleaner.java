@@ -16,8 +16,8 @@ public class Cleaner extends Employee {
     private String companyAddress;
     private List<Equip> equips;
 
-    public Cleaner(String firstName, String lastName, String profession) {
-        super(firstName, lastName, profession);
+    public Cleaner(String firstName, String lastName, String profession, Gender gender) {
+        super(firstName, lastName, profession, gender);
     }
 
     public String toString() {

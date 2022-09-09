@@ -5,11 +5,23 @@ public abstract class Human {
     private String firstName;
     private String lastName;
     private Integer idPassport;
+    private Gender gender;
 
-
-    public Human(String firstName, String lastName) {
+    public Human(String firstName, String lastName, Gender gender) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.gender = gender;
+    }
+
+    public Human() {
+    }
+
+    public enum Gender{
+        MALE, FEMALE;
+    }
+
+    public Gender getGender() {
+        return gender;
     }
 
     public int getIdPassport() {
@@ -20,10 +32,6 @@ public abstract class Human {
         this.idPassport = idPassport;
     }
 
-    public Human() {
-
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -31,6 +39,4 @@ public abstract class Human {
     public String getLastName() {
         return lastName;
     }
-
-
 }
