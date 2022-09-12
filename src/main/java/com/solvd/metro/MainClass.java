@@ -5,7 +5,12 @@ import com.solvd.metro.equip.EquipForCleaner;
 import com.solvd.metro.equip.EquipForEngineer;
 import com.solvd.metro.exception.InvalidSalaryException;
 import com.solvd.metro.file.WorkWithFile;
+import com.solvd.metro.impl.IMajorRenovation;
+import com.solvd.metro.impl.ISalary;
+import com.solvd.metro.impl.ISick;
+import com.solvd.metro.impl.ISumm;
 import com.solvd.metro.profession.*;
+import com.solvd.metro.reflexio.GetReflexio;
 import com.solvd.metro.station.Station;
 import com.solvd.metro.train.Train;
 
@@ -17,6 +22,10 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -55,6 +64,7 @@ public class MainClass {
 
         Engineer dmitriy = new Engineer("Dmitriy", "Kukushka", "Engineer", Human.Gender.MALE);
         dmitriy.setIdPassport(789);
+        dmitriy.setPay(bigDecimal);
         List<Engineer> engineers = new ArrayList<>();
         engineers.add(dmitriy);
 
@@ -78,6 +88,8 @@ public class MainClass {
         nemiga.setEmployees(stationNemigaEmloyees);
         proletarskaya.setEmployees(stationProletarskayaEmloyees);
         List<Station> stations = new ArrayList<>(Arrays.asList(nemiga, proletarskaya));
+
+        stations.stream().flatMap(st->st.getEmployeeList().stream()).forEach(System.out::println);
 
         EquipForCleaner mop = new EquipForCleaner("Mop", "Cleaner Room");
         EquipForEngineer overalls = new EquipForEngineer("Overalls", "Cleaner Room");
@@ -109,6 +121,12 @@ public class MainClass {
 
         PassengerFlowCalculation.retired(ivan);
         PassengerFlowCalculation.isEmployeeWorking(123, stations);
+        PassengerFlowCalculation.isEmployeeWorking(987, stations);
+        Consumer<Machinist> printer = (Machinist m) -> {
+            String model = m.getTrain().getModelTrain();
+            LOGGER.info(m.getFirstName() + '\t' + m.getTrain().getModelTrain() + '\t' + model);
+        };
+        printer.accept(ivan);
         PassengerFlowCalculation.getInformationAboutTrain(ivan);
         PassengerFlowCalculation.flowDivision(timeTable, passengers);
         PassengerFlowCalculation.useEquip(nikolay);
@@ -116,14 +134,7 @@ public class MainClass {
         PassengerFlowCalculation.getFirstAndLastName(ivan);
         PassengerFlowCalculation.weekend(ivan);
         PassengerFlowCalculation.stationType(nemiga);
-
-        try {
-            ivan.getSalary(ivan);
-        } catch (InvalidSalaryException e) {
-            LOGGER.info("error caught here!");
-        } finally {
-            LOGGER.info("Operation end!");
-        }
+        GetReflexio.getBadClassHuman();
 
         try (ClassForTryCatch classForTryCatch = new ClassForTryCatch()) {
             classForTryCatch.doSmth();
@@ -131,5 +142,86 @@ public class MainClass {
 
         String str = "src/main/resources/article-for-java.txt";
         WorkWithFile.readFile(str);
+
+        Predicate<Integer> isEvenNumber = x -> x % 2 == 0;
+
+        System.out.println(isEvenNumber.test(4));
+        System.out.println(isEvenNumber.test(3));
+
+        ISumm<Employee> isSumm = (Employee e) -> {
+            System.out.println(e.getFirstName() + e.getHoliday());
+        };
+        isSumm.summ(ivan);
+
+        IMajorRenovation iMajorRenovation = (Station s) -> {
+            LocalDate renovation = s.getDateBasis().plusYears(50);
+            int date = renovation.getYear();
+            LOGGER.info("Date of major Renovation: " + date);
+        };
+        iMajorRenovation.getDateMajorRenovation(nemiga);
+
+        ISalary<Engineer> iSalary = (Engineer e) -> {
+            BigDecimal salary = e.getPay();
+            BigDecimal zero = new BigDecimal("0");
+            salary = salary.multiply(BigDecimal.valueOf(6));
+            LOGGER.info(e.getFirstName() + " salary per month = " + salary + "$");
+            if (salary.compareTo(zero) <= 0) {
+                throw new InvalidSalaryException("salary must be > 0");
+            }
+        };
+        try {
+            iSalary.getSalary(dmitriy);
+        } catch (InvalidSalaryException e) {
+            LOGGER.info("error caught here!");
+        } finally {
+            LOGGER.info("Operation end!");
+        }
+
+        ISick<Machinist> iSick = (Machinist m) -> {
+            BigDecimal socialPay = m.getPay();
+            socialPay = socialPay.multiply(BigDecimal.valueOf(0.4));
+            LOGGER.info(m.getFirstName() + " has " + socialPay + "$ for sick");
+            LOGGER.info(m.getFirstName() + " has " + m.getVacationSickDays() + " days of sick leave per year");
+        } ;
+        iSick.getSocialPackage(ivan);
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        List<Integer> forStream = new ArrayList<>();
+        forStream.add(0);
+        forStream.add(1);
+        forStream.add(2);
+        forStream.add(3);
+        forStream.add(4);
+        forStream.add(5);
+        forStream.add(6);
+        forStream.add(7);
+        forStream.add(8);
+        forStream.add(9);
+
+        forStream.forEach(System.out::println);
+        System.out.println("\n");
+        forStream.stream().filter(x -> x > 5).forEach(System.out::println);
+        forStream.stream().map(m -> m + 1).forEach(System.out::println);
+        forStream.stream().peek(System.out::println);
+
+        Stream<String> phoneStream = Stream.of(("Honor 5"),
+                new String("Nokia 9"),
+                new String("Samsung Galaxy S9"),
+                new String("LG G6"));
+        Set<String> phones = phoneStream
+                .filter(s->s.length()<10)
+                .collect(Collectors.toSet());
+        phones.forEach((k)->System.out.println(k + " "));
+
+        Optional<Integer> first = forStream.stream().findFirst();
+        System.out.println(first);
+
+        Optional<Integer> noNumber = forStream.stream().min(Integer::compare);
+        System.out.println(noNumber.orElse(0));
+
+        ArrayList<Integer> numbers = new ArrayList<Integer>();
+        Optional<Integer> min = numbers.stream().min(Integer::compare);
+        System.out.println(min.orElseThrow(IllegalStateException::new));
     }
 }

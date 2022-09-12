@@ -10,6 +10,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class PassengerFlowCalculation {
 
@@ -29,6 +32,20 @@ public class PassengerFlowCalculation {
                 LOGGER.info(idPassport + " does not working at " + station.getName());
             }
         }
+        boolean work = false;
+
+        /*stations.forEach((Station s) -> {
+            s.getEmployees().forEach((key, value) -> {
+                if (idPassport.equals(key)) {
+                    LOGGER.info(s.getEmployees().get(idPassport) + " works at " + s.getName());
+                    work = true;
+                    break;
+                }
+            });
+            if(!work){
+                LOGGER.info(idPassport + " does not working at " + s.getName());
+            }
+        });*/
     }
 
     public static void getInformationAboutTrain(Machinist machinist) {
@@ -61,7 +78,9 @@ public class PassengerFlowCalculation {
     public static void flowDivision(TimeTable timeTable, ArrayList<Passenger> passengers) {
         boolean work = PassengerFlowCalculation.checkAndRefreshMetroStatus(timeTable);
         int numberOfPassangers = passengers.size();
-        if (!work) {
+
+        Predicate<Boolean> isPositive = b -> !b;
+        if (isPositive.test(work)) {
             LOGGER.info("underground is not working");
             return;
         }
@@ -93,7 +112,11 @@ public class PassengerFlowCalculation {
             Equip equip = cleaner.getEquips().get(i);
             equip.belong(cleaner);
         }
+
+        cleaner.getEquips().forEach((Equip e) -> e.belong(cleaner));
+        //stream.forEach((Equip e) -> e.belong(cleaner));
     }
+
 
     public static void getFirstAndLastName(Human human) {
         LOGGER.info("First Name = " + human.getFirstName());

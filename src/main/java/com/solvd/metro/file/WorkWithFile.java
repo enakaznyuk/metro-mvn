@@ -39,7 +39,7 @@ public class WorkWithFile {
             Arrays.sort(a, (Comparator) (o1, o2) -> ((Map.Entry<String, Integer>) o2).getValue()
                     .compareTo(((Map.Entry<String, Integer>) o1).getValue()));
             for(Map.Entry<String, Integer> e : a){
-                LOGGER.info(e.getKey() + " ; " + e.getValue());
+                //LOGGER.info(e.getKey() + " ; " + e.getValue());
                 FileUtils.write(newFile, e.getKey() + ": " + e.getValue() + "\n", StandardCharsets.UTF_8, true);
             }
         } catch (IOException e) {

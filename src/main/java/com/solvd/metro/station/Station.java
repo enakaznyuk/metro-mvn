@@ -8,9 +8,11 @@ import org.apache.logging.log4j.Logger;
 import com.solvd.metro.profession.Employee;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
-public class Station implements IMajorRenovation, IWork<Station> {
+public class Station implements /*IMajorRenovation,*/ IWork<Station> {
 
     private static final Logger LOGGER = LogManager.getLogger(Station.class);
 
@@ -18,6 +20,7 @@ public class Station implements IMajorRenovation, IWork<Station> {
     private String name;
     private Location location;
     private Map<Integer, Employee> employees;
+
 
     public Station(String name, LocalDate dateBasis, Location location) {
         this.name = name;
@@ -32,11 +35,11 @@ public class Station implements IMajorRenovation, IWork<Station> {
         UNDERGROUND, GROUND;
     }
 
-    public void getDateMajorRenovation(Station station) {
+    /*public void getDateMajorRenovation(Station station) {
         LocalDate renovation = getDateBasis().plusYears(50);
         int date = renovation.getYear();
         LOGGER.info("Date of major Renovation: " + date);
-    }
+    }*/
 
     @Override
     public void getTimeWorking(Station station) {
@@ -66,5 +69,9 @@ public class Station implements IMajorRenovation, IWork<Station> {
 
     public Location getLocation() {
         return location;
+    }
+
+    public Collection<Employee> getEmployeeList(){
+        return employees.values();
     }
 }

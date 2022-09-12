@@ -2,7 +2,8 @@ package com.solvd.metro.impl;
 
 import com.solvd.metro.profession.Employee;
 
-public interface ISick {
+@FunctionalInterface
+public interface ISick<Employee> {
 
     void getSocialPackage(Employee employee);
 

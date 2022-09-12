@@ -27,7 +27,7 @@ public class Cleaner extends Employee {
                 + " }";
     }
 
-    @Override
+    /*@Override
     public void getSalary(Employee employee) throws InvalidSalaryException {
         BigDecimal salary = employee.getPay();
         salary = salary.multiply(BigDecimal.valueOf(2.5));
@@ -36,15 +36,15 @@ public class Cleaner extends Employee {
         if (salary.compareTo(zero) <= 0) {
             throw new InvalidSalaryException("salary must be > 0");
         }
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void getSocialPackage(Employee employee) {
         BigDecimal socialPay = employee.getPay();
         socialPay = socialPay.multiply(BigDecimal.valueOf(0.3));
         LOGGER.info(employee.getFirstName() + " has " + socialPay + "$ for sick");
         LOGGER.info(employee.getFirstName() + " has " + employee.getVacationSickDays() + " days of sick leave per year");
-    }
+    }*/
 
     @Override
     public void getTimeWorking(Employee employee) {

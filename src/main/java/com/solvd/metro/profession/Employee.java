@@ -11,7 +11,7 @@ import com.solvd.metro.impl.IWork;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public abstract class Employee extends Human implements ISalary, ISick, IWork<Employee> {
+public abstract class Employee extends Human implements /*ISalary<Employee>, ISick,*/ IWork<Employee> {
 
     private static final Logger LOGGER = LogManager.getLogger(Employee.class);
 
@@ -58,9 +58,9 @@ public abstract class Employee extends Human implements ISalary, ISick, IWork<Em
         this.weekDay = weekDay;
     }
 
-    public abstract void getSalary(Employee employee) throws InvalidSalaryException;
+    //public abstract void getSalary(Employee employee) throws InvalidSalaryException;
 
-    public abstract void getSocialPackage(Employee employee);
+    //public abstract void getSocialPackage(Employee employee);
 
     public abstract void getTimeWorking(Employee employee);
 
