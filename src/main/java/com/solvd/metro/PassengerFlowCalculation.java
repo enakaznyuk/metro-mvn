@@ -1,6 +1,7 @@
 package com.solvd.metro;
 
 import com.solvd.metro.equip.Equip;
+import com.solvd.metro.impl.ISumm;
 import com.solvd.metro.profession.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,9 +11,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public class PassengerFlowCalculation {
 
@@ -33,19 +32,6 @@ public class PassengerFlowCalculation {
             }
         }
         boolean work = false;
-
-        /*stations.forEach((Station s) -> {
-            s.getEmployees().forEach((key, value) -> {
-                if (idPassport.equals(key)) {
-                    LOGGER.info(s.getEmployees().get(idPassport) + " works at " + s.getName());
-                    work = true;
-                    break;
-                }
-            });
-            if(!work){
-                LOGGER.info(idPassport + " does not working at " + s.getName());
-            }
-        });*/
     }
 
     public static void getInformationAboutTrain(Machinist machinist) {
@@ -123,7 +109,7 @@ public class PassengerFlowCalculation {
         LOGGER.info("Last Name =  " + human.getLastName());
     }
 
-    public static void retired(Employee employee){
+    /*public static void retired(Employee employee){
         switch (employee.getGender()) {
             case MALE -> LOGGER.info("He can retire at 65 years.");
             case FEMALE -> LOGGER.info("She can retire at 60 years.");
@@ -144,5 +130,9 @@ public class PassengerFlowCalculation {
             case GROUND -> LOGGER.info("Ground station");
             case UNDERGROUND -> LOGGER.info("Underground station");
         }
+    }*/
+
+    public static void methodWithParameter(int x, int y, ISumm<Integer, Integer> function){
+        function.summ(x, y);
     }
 }

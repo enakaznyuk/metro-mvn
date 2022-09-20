@@ -1,11 +1,9 @@
 package com.solvd.metro.profession;
 
-import com.solvd.metro.exception.InvalidSalaryException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.solvd.metro.train.Train;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Machinist extends Employee {
@@ -53,25 +51,6 @@ public class Machinist extends Employee {
         result = 31 * result + getCompanyAddress().hashCode();
         return result;
     }
-
-    /*@Override
-    public void getSalary(Employee employee) throws InvalidSalaryException {
-        BigDecimal salary = employee.getPay();
-        salary = salary.multiply(BigDecimal.valueOf(5.5));
-        BigDecimal zero = new BigDecimal("0");
-        LOGGER.info(employee.getFirstName() + " salary per month = " + salary + "$");
-        if (salary.compareTo(zero) <= 0) {
-            throw new InvalidSalaryException("salary must be > 0");
-        }
-    }*/
-
-    /*@Override
-    public void getSocialPackage(Employee employee) {
-        BigDecimal socialPay = employee.getPay();
-        socialPay = socialPay.multiply(BigDecimal.valueOf(0.4));
-        LOGGER.info(employee.getFirstName() + " has " + socialPay + "$ for sick");
-        LOGGER.info(employee.getFirstName() + " has " + employee.getVacationSickDays() + " days of sick leave per year");
-    }*/
 
     @Override
     public void getTimeWorking(Employee employee) {

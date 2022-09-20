@@ -1,11 +1,8 @@
 package com.solvd.metro.profession;
 
 import com.solvd.metro.exception.InvalidNameException;
-import com.solvd.metro.exception.InvalidSalaryException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.solvd.metro.impl.ISalary;
-import com.solvd.metro.impl.ISick;
 import com.solvd.metro.impl.IWork;
 
 import java.math.BigDecimal;
@@ -31,13 +28,13 @@ public abstract class Employee extends Human implements /*ISalary<Employee>, ISi
     }
 
     public enum WeekDay{
-        SUNDAY ("Воскресенье"),
-        MONDAY ("Понедельник"),
-        TUESDAY ("Вторник"),
-        WEDNESDAY ("Среда"),
-        THURSDAY ("Четверг"),
-        FRIDAY ("Пятница"),
-        SATURDAY ("Суббота");
+        SUNDAY ("SUNDAY"),
+        MONDAY ("MONDAY"),
+        TUESDAY ("TUESDAY"),
+        WEDNESDAY ("WEDNESDAY"),
+        THURSDAY ("THURSDAY"),
+        FRIDAY ("FRIDAY"),
+        SATURDAY ("SATURDAY");
 
         private String day;
 
@@ -57,10 +54,6 @@ public abstract class Employee extends Human implements /*ISalary<Employee>, ISi
     public void setWeekDay(WeekDay weekDay) {
         this.weekDay = weekDay;
     }
-
-    //public abstract void getSalary(Employee employee) throws InvalidSalaryException;
-
-    //public abstract void getSocialPackage(Employee employee);
 
     public abstract void getTimeWorking(Employee employee);
 

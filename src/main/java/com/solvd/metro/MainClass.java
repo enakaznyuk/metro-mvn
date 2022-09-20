@@ -1,5 +1,8 @@
 package com.solvd.metro;
 
+import com.solvd.metro.Conn.ClientThread;
+import com.solvd.metro.Conn.Connection;
+import com.solvd.metro.Conn.ConnectionPool;
 import com.solvd.metro.equip.Equip;
 import com.solvd.metro.equip.EquipForCleaner;
 import com.solvd.metro.equip.EquipForEngineer;
@@ -14,21 +17,18 @@ import com.solvd.metro.reflexio.GetReflexio;
 import com.solvd.metro.station.Station;
 import com.solvd.metro.train.Train;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +36,7 @@ public class MainClass {
 
     private static final Logger LOGGER = LogManager.getLogger(MainClass.class);
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
 
         System.out.println("Hello");
 
@@ -100,7 +100,7 @@ public class MainClass {
         dmitriy.setEquips(engineerEquips);
 
         Train<Integer> train = new Train<>(1, LocalDate.of(2015, 9, 16), "Shtadler");
-        List<Train<?>> trains = new ArrayList<>(List.of(train));
+        List<Train<?>> trains = List.of(train);
         ivan.setTrain(trains.get(0));
 
         TimeTable timeTable = new TimeTable();
@@ -119,7 +119,7 @@ public class MainClass {
         metro.setTimeTable(timeTable);
         metro.setPassengers(passengers);
 
-        PassengerFlowCalculation.retired(ivan);
+        //PassengerFlowCalculation.retired(ivan);
         PassengerFlowCalculation.isEmployeeWorking(123, stations);
         PassengerFlowCalculation.isEmployeeWorking(987, stations);
         Consumer<Machinist> printer = (Machinist m) -> {
@@ -132,8 +132,8 @@ public class MainClass {
         PassengerFlowCalculation.useEquip(nikolay);
         PassengerFlowCalculation.toCompare(ivan, sergey);
         PassengerFlowCalculation.getFirstAndLastName(ivan);
-        PassengerFlowCalculation.weekend(ivan);
-        PassengerFlowCalculation.stationType(nemiga);
+        //PassengerFlowCalculation.weekend(ivan);
+        //PassengerFlowCalculation.stationType(nemiga);
         GetReflexio.getBadClassHuman();
 
         try (ClassForTryCatch classForTryCatch = new ClassForTryCatch()) {
@@ -148,10 +148,11 @@ public class MainClass {
         System.out.println(isEvenNumber.test(4));
         System.out.println(isEvenNumber.test(3));
 
-        ISumm<Employee> isSumm = (Employee e) -> {
-            System.out.println(e.getFirstName() + e.getHoliday());
+        ISumm<Integer, Integer> isSumm = (a, b) -> {
+            System.out.println("a + b = " + (a + b));
         };
-        isSumm.summ(ivan);
+
+        PassengerFlowCalculation.methodWithParameter(1, 2, isSumm);
 
         IMajorRenovation iMajorRenovation = (Station s) -> {
             LocalDate renovation = s.getDateBasis().plusYears(50);
@@ -185,6 +186,8 @@ public class MainClass {
         } ;
         iSick.getSocialPackage(ivan);
 
+
+
         ///////////////////////////////////////////////////////////////////////////////
 
         List<Integer> forStream = new ArrayList<>();
@@ -199,11 +202,15 @@ public class MainClass {
         forStream.add(8);
         forStream.add(9);
 
-        forStream.forEach(System.out::println);
+        forStream.
+                forEach(System.out::println);
         System.out.println("\n");
-        forStream.stream().filter(x -> x > 5).forEach(System.out::println);
-        forStream.stream().map(m -> m + 1).forEach(System.out::println);
-        forStream.stream().peek(System.out::println);
+        forStream.stream().filter(x -> x > 5).
+                forEach(System.out::println);
+        forStream.stream().map(m -> m + 1).
+                forEach(System.out::println);
+        forStream.stream().
+                peek(System.out::println);
 
         Stream<String> phoneStream = Stream.of(("Honor 5"),
                 new String("Nokia 9"),
@@ -212,16 +219,104 @@ public class MainClass {
         Set<String> phones = phoneStream
                 .filter(s->s.length()<10)
                 .collect(Collectors.toSet());
-        phones.forEach((k)->System.out.println(k + " "));
+        phones.
+                forEach((k)->System.out.println(k + " "));
 
-        Optional<Integer> first = forStream.stream().findFirst();
+        Optional<Integer> first = forStream.
+                stream().
+                findFirst();
         System.out.println(first);
 
-        Optional<Integer> noNumber = forStream.stream().min(Integer::compare);
+        Optional<Integer> noNumber = forStream.
+                stream().
+                min(Integer::compare);
         System.out.println(noNumber.orElse(0));
 
-        ArrayList<Integer> numbers = new ArrayList<Integer>();
+        /*ArrayList<Integer> numbers = new ArrayList<Integer>();
         Optional<Integer> min = numbers.stream().min(Integer::compare);
-        System.out.println(min.orElseThrow(IllegalStateException::new));
+        System.out.println(min.orElseThrow(IllegalStateException::new));*/
+
+        ///////////////////////////////////////////////////////////////
+
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        connectionPool.setPOOL_SIZE(3);
+        connectionPool.setFreeConnections();
+
+        ClientThread ct1 = new  ClientThread();
+
+        //ct1.start();
+
+        new Thread(() -> {
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            if (connection != null){
+                connection.startWork();
+            }else {
+                LOGGER.info("No thread for you, sorry!");
+            }
+        }).start();
+
+        Runnable r = () ->{
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            if (connection != null){
+                connection.startWork();
+            }else {
+                LOGGER.info("No thread for you, sorry!");
+            }
+        };
+        //r.run();
+
+        Runnable rTwo = () ->{
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            if (connection != null){
+                connection.startWork();
+            }else {
+                LOGGER.info("No thread for you, sorry!");
+            }
+        };
+        //rTwo.run();
+
+        CompletableFuture<Void> threadOne = CompletableFuture.runAsync(() ->{
+            Connection connection = ConnectionPool.getInstance().getConnection();
+            if (connection != null){
+                connection.startWork();
+            }else {
+                LOGGER.info("No thread for you, sorry!");
+            }
+        });
+        try {
+            threadOne.get(1, TimeUnit.SECONDS);
+        }catch (InterruptedException | ExecutionException | TimeoutException e){
+            throw new RuntimeException(e);
+        }
+
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+        executorService.submit(r, TimeUnit.SECONDS);
+        executorService.submit(rTwo, TimeUnit.SECONDS);
+        executorService.submit(ct1, TimeUnit.SECONDS);
+        executorService.shutdown();
+
+        CompletableFuture<Integer> cf1 = CompletableFuture.supplyAsync(() -> 1);
+        CompletableFuture<Integer> cf2 = CompletableFuture.supplyAsync(() -> 2);
+        CompletableFuture<Integer> cf3 = CompletableFuture.supplyAsync(() -> 3);
+        CompletableFuture<Void> cfAll = CompletableFuture.allOf(cf1, cf2, cf3);
+        cfAll.join();
+
+
+        CompletableFuture<String> threadTwo = CompletableFuture.supplyAsync(() ->{
+            pause(2);
+            return "1234";
+        }).thenApplyAsync(p -> {
+            return "4321";
+        });
+        threadTwo.join();
+    }
+
+    private static void pause(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000L);
+        }catch (InterruptedException e){
+            throw new RuntimeException(e);
+        }
     }
 }
