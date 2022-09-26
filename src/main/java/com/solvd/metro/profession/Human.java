@@ -13,6 +13,11 @@ public abstract class Human {
         this.gender = gender;
     }
 
+    public Human(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public Human() {
     }
 

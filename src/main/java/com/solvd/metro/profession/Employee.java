@@ -27,6 +27,15 @@ public abstract class Employee extends Human implements /*ISalary<Employee>, ISi
         }
     }
 
+    public Employee(String firstName, String secondName, String profession) {
+        super(firstName, secondName);
+        this.profession = profession;
+
+        if (!firstName.matches("^\\D*$")) {
+            throw new InvalidNameException("name must not contain numbers");
+        }
+    }
+
     public enum WeekDay{
         SUNDAY ("SUNDAY"),
         MONDAY ("MONDAY"),

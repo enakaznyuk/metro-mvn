@@ -18,6 +18,10 @@ public class Engineer extends Employee {
         super(firstName, lastName, profession, gender);
     }
 
+    public Engineer(String firstName, String lastName, String profession){
+        super(firstName, lastName, profession);
+    }
+
     public String toString() {
         String fullName = getFirstName() + " " + getLastName();
         return "Engineer{ "

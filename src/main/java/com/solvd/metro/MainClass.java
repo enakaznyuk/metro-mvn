@@ -8,16 +8,16 @@ import com.solvd.metro.equip.EquipForCleaner;
 import com.solvd.metro.equip.EquipForEngineer;
 import com.solvd.metro.exception.InvalidSalaryException;
 import com.solvd.metro.file.WorkWithFile;
-import com.solvd.metro.impl.IMajorRenovation;
-import com.solvd.metro.impl.ISalary;
-import com.solvd.metro.impl.ISick;
-import com.solvd.metro.impl.ISumm;
+import com.solvd.metro.xml.JaxBCreater;
+import com.solvd.metro.xml.XmlParser;
+import com.solvd.metro.xml.XsdCheck;
+import com.solvd.metro.impl.*;
 import com.solvd.metro.profession.*;
 import com.solvd.metro.reflexio.GetReflexio;
 import com.solvd.metro.station.Station;
 import com.solvd.metro.train.Train;
 
-import java.io.IOException;
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -29,14 +29,19 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.solvd.metro.xml.XmlCreater;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 public class MainClass {
 
     private static final Logger LOGGER = LogManager.getLogger(MainClass.class);
 
-    public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
+    public static void main(String[] args) throws Exception {
 
         System.out.println("Hello");
 
@@ -310,6 +315,46 @@ public class MainClass {
             return "4321";
         });
         threadTwo.join();
+
+        //////////////////////////////////////
+
+        XmlCreater.xmlWork(metro);
+
+        boolean b = XsdCheck.checkXMLForXSD("D:/Java/Courses/metro-maven/metro.xml", "D:/Java/Courses/metro-maven/schememetro.xsd");
+        System.out.println("XML соответствует XSD : " + b);
+
+        boolean bad = XsdCheck.checkXMLForXSD("D:/Java/Courses/metro-maven/metroBAD.xml", "D:/Java/Courses/metro-maven/schememetro.xsd");
+        System.out.println("XML соответствует XSD : " + bad);
+
+        IPars iPars = new XmlParser();
+        File xmlFile = new File("D:/Java/Courses/metro-maven/metro.xml");
+        iPars.parse(xmlFile);
+
+        ///////////////////////////////////////////////////////
+
+        MetroJaxB metroMinsk = new MetroJaxB();
+
+        metroMinsk.setEmployees(employees);
+        metroMinsk.setStations(stations);
+        metroMinsk.setPassengers(passengers);
+        metroMinsk.setTimeTable(timeTable);
+
+        /*try {
+
+            JAXBContext jaxbContext = JAXBContext.newInstance(MetroJaxB.class);
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+            File XMLfile = new File("D:/Java/Courses/metro-maven/metroJaxB.xml");
+
+            jaxbMarshaller.marshal(metroMinsk, XMLfile);
+
+            jaxbMarshaller.marshal(metroMinsk, System.out);
+
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }*/
     }
 
     private static void pause(int seconds) {

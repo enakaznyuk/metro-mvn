@@ -31,8 +31,23 @@ public class Station implements /*IMajorRenovation,*/ IWork<Station> {
         }
     }
 
+    public Station(String name, LocalDate dateBasis){
+        this.name = name;
+        this.dateBasis = dateBasis;
+        if (dateBasis.getYear() < 1980) {
+            throw new InvalidDataException("Date must be > 1980!");
+        }
+    }
+
     public enum Location{
         UNDERGROUND, GROUND;
+    }
+
+    public String toString() {
+        String fullInfo = getName() + " " + getDateBasis();
+        return "Station{ "
+                + "Full Information = " + fullInfo
+                + " }";
     }
 
     /*public void getDateMajorRenovation(Station station) {
