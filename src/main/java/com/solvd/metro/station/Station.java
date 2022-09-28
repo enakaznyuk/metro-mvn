@@ -3,21 +3,27 @@ package com.solvd.metro.station;
 import com.solvd.metro.exception.InvalidDataException;
 import com.solvd.metro.impl.IMajorRenovation;
 import com.solvd.metro.impl.IWork;
+import com.solvd.metro.xml.LocalDateAdapter;
+import com.solvd.metro.xml.LocalTimeAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.solvd.metro.profession.Employee;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
+@XmlType(propOrder = {"name", "dateBasis"})
 public class Station implements /*IMajorRenovation,*/ IWork<Station> {
 
     private static final Logger LOGGER = LogManager.getLogger(Station.class);
 
-    private LocalDate dateBasis;
     private String name;
+    private LocalDate dateBasis;
+
+    @XmlTransient
     private Location location;
     private Map<Integer, Employee> employees;
 
@@ -38,6 +44,8 @@ public class Station implements /*IMajorRenovation,*/ IWork<Station> {
             throw new InvalidDataException("Date must be > 1980!");
         }
     }
+
+    public Station(){}
 
     public enum Location{
         UNDERGROUND, GROUND;
@@ -70,14 +78,18 @@ public class Station implements /*IMajorRenovation,*/ IWork<Station> {
         return employees;
     }
 
+    @XmlTransient
     public void setEmployees(Map<Integer, Employee> employees) {
         this.employees = employees;
     }
 
+    @XmlElement
     public String getName() {
         return name;
     }
 
+    @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
+    @XmlElement
     public LocalDate getDateBasis() {
         return dateBasis;
     }

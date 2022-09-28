@@ -1,7 +1,13 @@
 package com.solvd.metro;
 
-import java.time.LocalTime;
+import com.solvd.metro.xml.LocalTimeAdapter;
 
+import java.time.LocalTime;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+//@XmlRootElement(namespace = "start")
+@XmlType(propOrder = {"startWorking", "endWorking"})
 public class TimeTable {
 
     private LocalTime startWorking;
@@ -10,6 +16,8 @@ public class TimeTable {
     private LocalTime endWorking;
     private String partOfDay;
 
+    @XmlJavaTypeAdapter(value = LocalTimeAdapter.class)
+    @XmlElement
     public LocalTime getStartWorking() {
         return startWorking;
     }
@@ -22,6 +30,7 @@ public class TimeTable {
         return middleWorking;
     }
 
+    @XmlTransient
     public void setMiddleWorking(LocalTime middleWorking) {
         this.middleWorking = middleWorking;
     }
@@ -30,10 +39,13 @@ public class TimeTable {
         return middleWorkingEnd;
     }
 
+    @XmlTransient
     public void setMiddleWorkingEnd(LocalTime middleWorkingEnd) {
         this.middleWorkingEnd = middleWorkingEnd;
     }
 
+    @XmlJavaTypeAdapter(value = LocalTimeAdapter.class)
+    @XmlElement
     public LocalTime getEndWorking() {
         return endWorking;
     }
@@ -46,6 +58,7 @@ public class TimeTable {
         return partOfDay;
     }
 
+    @XmlTransient
     public void setPartOfDay(String partOfDay) {
         this.partOfDay = partOfDay;
     }

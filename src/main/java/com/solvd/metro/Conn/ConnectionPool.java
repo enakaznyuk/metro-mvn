@@ -10,7 +10,7 @@ public class ConnectionPool {
 
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
 
-    private int POOL_SIZE;
+    private int POOL_SIZE = 10;
     private Queue<Connection> freeConnections;
     private Queue<Connection> engageConnections;
 
@@ -21,11 +21,25 @@ public class ConnectionPool {
         engageConnections = new ConcurrentLinkedQueue<>();
     }
 
+    public static ConnectionPool getInstance(int POOL_SIZE) {
+        if (instance == null) {
+            synchronized (ConnectionPool.class) {
+                if (instance == null) {
+                    instance = new ConnectionPool();
+                    instance.POOL_SIZE = POOL_SIZE;
+                    instance.setFreeConnections();
+                }
+            }
+        }
+        return instance;
+    }
+
     public static ConnectionPool getInstance() {
         if (instance == null) {
             synchronized (ConnectionPool.class) {
                 if (instance == null) {
                     instance = new ConnectionPool();
+                    instance.setFreeConnections();
                 }
             }
         }
@@ -51,10 +65,6 @@ public class ConnectionPool {
 
     public int getPOOL_SIZE() {
         return POOL_SIZE;
-    }
-
-    public void setPOOL_SIZE(int POOL_SIZE) {
-        this.POOL_SIZE = POOL_SIZE;
     }
 
     public void setFreeConnections() {

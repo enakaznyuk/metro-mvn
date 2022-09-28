@@ -7,6 +7,8 @@ import com.solvd.metro.profession.Employee;
 import com.solvd.metro.profession.Engineer;
 import com.solvd.metro.profession.Machinist;
 import com.solvd.metro.station.Station;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -25,6 +27,9 @@ import java.util.List;
 import java.util.Map;
 
 public class XmlParser implements IPars {
+
+    private static final Logger LOGGER = LogManager.getLogger(XmlParser.class);
+
     @Override
     public Metro parse(File file) {
         Metro result = new Metro();
@@ -34,7 +39,7 @@ public class XmlParser implements IPars {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = builder.parse(file);
             document.getDocumentElement().normalize();
-            System.out.println("Корневой элемент: " + document.getDocumentElement().getNodeName());
+            System.out.println("Root element: " + document.getDocumentElement().getNodeName());
             NodeList nodeListStation = document.getElementsByTagName("Station");
             NodeList nodeListEmployee = document.getElementsByTagName("Employee");
 
@@ -59,7 +64,8 @@ public class XmlParser implements IPars {
 
             result.setStations(stationList);
         }catch (ParserConfigurationException | SAXException | IOException e){
-            e.printStackTrace();
+            LOGGER.error(e);
+            //e.printStackTrace();
         }
         return result;
     }

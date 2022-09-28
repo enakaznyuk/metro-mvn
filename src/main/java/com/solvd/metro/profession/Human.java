@@ -1,5 +1,8 @@
 package com.solvd.metro.profession;
 
+import javax.xml.bind.annotation.*;
+
+@XmlType(propOrder = {"firstName", "lastName"})
 public abstract class Human {
 
     private String firstName;
@@ -18,17 +21,16 @@ public abstract class Human {
         this.lastName = lastName;
     }
 
-    public Human() {
-    }
-
-    public enum Gender{
+    public enum Gender {
         MALE, FEMALE;
     }
 
+    @XmlTransient
     public Gender getGender() {
         return gender;
     }
 
+    @XmlTransient
     public int getIdPassport() {
         return idPassport;
     }
@@ -37,10 +39,12 @@ public abstract class Human {
         this.idPassport = idPassport;
     }
 
+    @XmlElement
     public String getFirstName() {
         return firstName;
     }
 
+    @XmlElement
     public String getLastName() {
         return lastName;
     }

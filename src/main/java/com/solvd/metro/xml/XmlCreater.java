@@ -16,11 +16,15 @@ import javax.xml.transform.stream.StreamResult;
 import com.solvd.metro.Metro;
 import com.solvd.metro.profession.Employee;
 import com.solvd.metro.station.Station;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 public class XmlCreater {
+
+    private static final Logger LOGGER = LogManager.getLogger(XmlCreater.class);
 
     public static void xmlWork(Metro metro) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -70,14 +74,15 @@ public class XmlCreater {
             DOMSource source = new DOMSource(doc);
 
             StreamResult console = new StreamResult(System.out);
-            StreamResult file = new StreamResult(new File("D:/Java/Courses/metro-maven/metro.xml"));
+            StreamResult file = new StreamResult(new File("D:/Java/Courses/metro-maven/src/main/resources/metro.xml"));
 
             transformer.transform(source, console);
             transformer.transform(source, file);
-            System.out.println("Создание XML файла закончено");
+            System.out.println("Create XML file was end");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e);
+            //e.printStackTrace();
         }
     }
 

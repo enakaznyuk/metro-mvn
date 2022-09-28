@@ -5,9 +5,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.solvd.metro.impl.IWork;
 
+import javax.xml.bind.annotation.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+@XmlType(propOrder = {"profession"})
 public abstract class Employee extends Human implements /*ISalary<Employee>, ISick,*/ IWork<Employee> {
 
     private static final Logger LOGGER = LogManager.getLogger(Employee.class);
@@ -56,6 +58,7 @@ public abstract class Employee extends Human implements /*ISalary<Employee>, ISi
         }
     }
 
+    @XmlTransient
     public WeekDay getWeekDay() {
         return weekDay;
     }
@@ -68,10 +71,12 @@ public abstract class Employee extends Human implements /*ISalary<Employee>, ISi
 
     public abstract void getWeekend(Employee employee);
 
+    @XmlElement
     public String getProfession() {
         return profession;
     }
 
+    @XmlTransient
     public BigDecimal getPay() {
         return pay;
     }
@@ -80,6 +85,7 @@ public abstract class Employee extends Human implements /*ISalary<Employee>, ISi
         this.pay = pay;
     }
 
+    @XmlTransient
     public BigInteger getVacationSickDays() {
         return vacationSickDays;
     }
@@ -88,6 +94,7 @@ public abstract class Employee extends Human implements /*ISalary<Employee>, ISi
         this.vacationSickDays = vacationSickDays;
     }
 
+    @XmlTransient
     public String getHoliday() {
         return holiday;
     }

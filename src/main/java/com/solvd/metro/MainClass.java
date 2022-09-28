@@ -8,9 +8,7 @@ import com.solvd.metro.equip.EquipForCleaner;
 import com.solvd.metro.equip.EquipForEngineer;
 import com.solvd.metro.exception.InvalidSalaryException;
 import com.solvd.metro.file.WorkWithFile;
-import com.solvd.metro.xml.JaxBCreater;
-import com.solvd.metro.xml.XmlParser;
-import com.solvd.metro.xml.XsdCheck;
+import com.solvd.metro.xml.*;
 import com.solvd.metro.impl.*;
 import com.solvd.metro.profession.*;
 import com.solvd.metro.reflexio.GetReflexio;
@@ -29,13 +27,13 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.solvd.metro.xml.XmlCreater;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 public class MainClass {
 
@@ -94,7 +92,7 @@ public class MainClass {
         proletarskaya.setEmployees(stationProletarskayaEmloyees);
         List<Station> stations = new ArrayList<>(Arrays.asList(nemiga, proletarskaya));
 
-        stations.stream().flatMap(st->st.getEmployeeList().stream()).forEach(System.out::println);
+        stations.stream().flatMap(st -> st.getEmployeeList().stream()).forEach(System.out::println);
 
         EquipForCleaner mop = new EquipForCleaner("Mop", "Cleaner Room");
         EquipForEngineer overalls = new EquipForEngineer("Overalls", "Cleaner Room");
@@ -188,9 +186,8 @@ public class MainClass {
             socialPay = socialPay.multiply(BigDecimal.valueOf(0.4));
             LOGGER.info(m.getFirstName() + " has " + socialPay + "$ for sick");
             LOGGER.info(m.getFirstName() + " has " + m.getVacationSickDays() + " days of sick leave per year");
-        } ;
+        };
         iSick.getSocialPackage(ivan);
-
 
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -222,10 +219,10 @@ public class MainClass {
                 new String("Samsung Galaxy S9"),
                 new String("LG G6"));
         Set<String> phones = phoneStream
-                .filter(s->s.length()<10)
+                .filter(s -> s.length() < 10)
                 .collect(Collectors.toSet());
         phones.
-                forEach((k)->System.out.println(k + " "));
+                forEach((k) -> System.out.println(k + " "));
 
         Optional<Integer> first = forStream.
                 stream().
@@ -243,54 +240,71 @@ public class MainClass {
 
         ///////////////////////////////////////////////////////////////
 
-        ConnectionPool connectionPool = ConnectionPool.getInstance();
-        connectionPool.setPOOL_SIZE(3);
+        ConnectionPool connectionPool = ConnectionPool.getInstance(2);
         connectionPool.setFreeConnections();
 
-        ClientThread ct1 = new  ClientThread();
 
-        //ct1.start();
+        ClientThread ct1 = new ClientThread();
 
         new Thread(() -> {
-            Connection connection = ConnectionPool.getInstance().getConnection();
-            if (connection != null){
-                connection.startWork();
-            }else {
-                LOGGER.info("No thread for you, sorry!");
+            while (true) {
+                Connection connection = ConnectionPool.getInstance().getConnection();
+                if (connection != null) {
+                    connection.startWork();
+                    ConnectionPool.getInstance().returnConnection(connection);
+                    break;
+                } else {
+                    LOGGER.info("No thread for you, sorry!");
+                    pause(2);
+                }
             }
         }).start();
 
-        Runnable r = () ->{
-            Connection connection = ConnectionPool.getInstance().getConnection();
-            if (connection != null){
-                connection.startWork();
-            }else {
-                LOGGER.info("No thread for you, sorry!");
+
+        Runnable r = () -> {
+            while (true) {
+                Connection connection = ConnectionPool.getInstance().getConnection();
+                if (connection != null) {
+                    connection.startWork();
+                    ConnectionPool.getInstance().returnConnection(connection);
+                    break;
+                } else {
+                    LOGGER.info("No thread for you, sorry!");
+                    pause(2);
+                }
             }
         };
-        //r.run();
 
-        Runnable rTwo = () ->{
-            Connection connection = ConnectionPool.getInstance().getConnection();
-            if (connection != null){
-                connection.startWork();
-            }else {
-                LOGGER.info("No thread for you, sorry!");
+        Runnable rTwo = () -> {
+            while (true) {
+                Connection connection = ConnectionPool.getInstance().getConnection();
+                if (connection != null) {
+                    connection.startWork();
+                    ConnectionPool.getInstance().returnConnection(connection);
+                    break;
+                } else {
+                    LOGGER.info("No thread for you, sorry!");
+                    pause(2);
+                }
             }
         };
-        //rTwo.run();
 
-        CompletableFuture<Void> threadOne = CompletableFuture.runAsync(() ->{
-            Connection connection = ConnectionPool.getInstance().getConnection();
-            if (connection != null){
-                connection.startWork();
-            }else {
-                LOGGER.info("No thread for you, sorry!");
+        CompletableFuture<Void> threadOne = CompletableFuture.runAsync(() -> {
+            while (true) {
+                Connection connection = ConnectionPool.getInstance().getConnection();
+                if (connection != null) {
+                    connection.startWork();
+                    ConnectionPool.getInstance().returnConnection(connection);
+                    break;
+                } else {
+                    LOGGER.info("No thread for you, sorry!");
+                    pause(2);
+                }
             }
         });
         try {
             threadOne.get(1, TimeUnit.SECONDS);
-        }catch (InterruptedException | ExecutionException | TimeoutException e){
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new RuntimeException(e);
         }
 
@@ -308,7 +322,7 @@ public class MainClass {
         cfAll.join();
 
 
-        CompletableFuture<String> threadTwo = CompletableFuture.supplyAsync(() ->{
+        CompletableFuture<String> threadTwo = CompletableFuture.supplyAsync(() -> {
             pause(2);
             return "1234";
         }).thenApplyAsync(p -> {
@@ -316,18 +330,34 @@ public class MainClass {
         });
         threadTwo.join();
 
+        for (int i = 0; i < 5; i++) {
+            new Thread(() -> {
+                while (true) {
+                    Connection connection = ConnectionPool.getInstance().getConnection();
+                    if (connection != null) {
+                        connection.startWork();
+                        ConnectionPool.getInstance().returnConnection(connection);
+                        break;
+                    } else {
+                        LOGGER.info("No thread for you, sorry!");
+                        pause(2);
+                    }
+                }
+            }).start();
+        }
+
         //////////////////////////////////////
 
         XmlCreater.xmlWork(metro);
 
-        boolean b = XsdCheck.checkXMLForXSD("D:/Java/Courses/metro-maven/metro.xml", "D:/Java/Courses/metro-maven/schememetro.xsd");
-        System.out.println("XML соответствует XSD : " + b);
+        boolean b = XsdCheck.checkXMLForXSD("D:/Java/Courses/metro-maven/src/main/resources/metro.xml", "D:/Java/Courses/metro-maven/src/main/resources/schememetro.xsd");
+        System.out.println("XML = XSD : " + b);
 
-        boolean bad = XsdCheck.checkXMLForXSD("D:/Java/Courses/metro-maven/metroBAD.xml", "D:/Java/Courses/metro-maven/schememetro.xsd");
-        System.out.println("XML соответствует XSD : " + bad);
+        boolean bad = XsdCheck.checkXMLForXSD("D:/Java/Courses/metro-maven/src/main/resources/metroBAD.xml", "D:/Java/Courses/metro-maven/src/main/resources/schememetro.xsd");
+        System.out.println("XML = XSD : " + bad);
 
         IPars iPars = new XmlParser();
-        File xmlFile = new File("D:/Java/Courses/metro-maven/metro.xml");
+        File xmlFile = new File("D:/Java/Courses/metro-maven/src/main/resources/metro.xml");
         iPars.parse(xmlFile);
 
         ///////////////////////////////////////////////////////
@@ -339,28 +369,45 @@ public class MainClass {
         metroMinsk.setPassengers(passengers);
         metroMinsk.setTimeTable(timeTable);
 
-        /*try {
+        JaxBCreater jaxBCreater = new JaxBCreater();
+        jaxBCreater.setId(1);
+        jaxBCreater.setAge(21);
+        jaxBCreater.setName("Andrew");
+        jaxBCreater.setLanguage("Java");
+        jaxBCreater.setPassword("simplepassword");
+
+        try {
 
             JAXBContext jaxbContext = JAXBContext.newInstance(MetroJaxB.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-            File XMLfile = new File("D:/Java/Courses/metro-maven/metroJaxB.xml");
+            File XMLfile = new File("D:/Java/Courses/metro-maven/src/main/resources/metroJaxB.xml");
 
             jaxbMarshaller.marshal(metroMinsk, XMLfile);
-
             jaxbMarshaller.marshal(metroMinsk, System.out);
 
         } catch (JAXBException e) {
+            //e.printStackTrace();
+            LOGGER.error(e);
+        }
+
+        try {
+
+            JAXBContext jaxbContextOne = JAXBContext.newInstance(MetroJaxB.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContextOne.createUnmarshaller();
+
+            File XMLfile = new File("D:/Java/Courses/metro-maven/src/main/resources/metroJaxB.xml");
+            MetroJaxB MetroJaxB = (MetroJaxB) jaxbUnmarshaller.unmarshal(XMLfile);
+        } catch (JAXBException e) {
             e.printStackTrace();
-        }*/
+        }
     }
+
 
     private static void pause(int seconds) {
         try {
             Thread.sleep(seconds * 1000L);
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

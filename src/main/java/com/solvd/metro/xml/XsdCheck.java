@@ -18,11 +18,11 @@ public class XsdCheck {
             File xsd = new File(pathXsd);
 
             if (!xml.exists()) {
-                System.out.println("Не найден XML " + pathXml);
+                System.out.println("XML-file not found " + pathXml);
             }
 
             if (!xsd.exists()) {
-                System.out.println("Не найден XSD " + pathXsd);
+                System.out.println("XSD-file not found " + pathXsd);
             }
 
             if (!xml.exists() || !xsd.exists()) {

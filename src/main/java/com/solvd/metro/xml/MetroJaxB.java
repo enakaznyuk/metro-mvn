@@ -1,21 +1,18 @@
-package com.solvd.metro;
+package com.solvd.metro.xml;
 
+import com.solvd.metro.TimeTable;
 import com.solvd.metro.profession.Employee;
 import com.solvd.metro.profession.Passenger;
 import com.solvd.metro.station.Station;
-import jakarta.xml.bind.annotation.XmlTransient;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@XmlRootElement(name = "Metro")
-@XmlType(propOrder = {"Employees", "Stations", "TimeTable"})
-
+@XmlRootElement(name = "Metros")
+@XmlType(propOrder = {"employees", "stations", "timeTable"})
 public class MetroJaxB {
 
     private Map<Integer, Employee> employees;

@@ -30,8 +30,8 @@ public class Connection {
     public void startWork(){
         LOGGER.info("Input number");
         read();
-        update();
-        delete();
-        save();
+        //update();
+        //delete();
+        //save();
     }
 }
