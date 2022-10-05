@@ -1,4 +1,4 @@
-package com.solvd.metro.Conn;
+package com.solvd.metro.сonn;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +13,7 @@ public class ConnectionPool {
     private int POOL_SIZE = 10;
     private Queue<Connection> freeConnections;
     private Queue<Connection> engageConnections;
+    private boolean poolLock = true;
 
     private volatile static ConnectionPool instance;
 
@@ -47,20 +48,21 @@ public class ConnectionPool {
     }
 
     public synchronized Connection getConnection() {
-        Connection connection;
-        connection = freeConnections.poll();
-        if (connection != null){
-            engageConnections.add(connection);
+        Connection connection = null;
+        while (connection == null) {
+            if(freeConnections.isEmpty()){
+                Connection.pause(2);
+            }else {
+                connection = freeConnections.poll();
+                engageConnections.add(connection);
+            }
         }
         return connection;
     }
 
-    public synchronized boolean returnConnection(Connection conn) {
-        if (conn == null || !engageConnections.contains(conn))
-            return false;
+    public void returnConnection(Connection conn) {
         engageConnections.remove(conn);
         freeConnections.add(conn);
-        return true;
     }
 
     public int getPOOL_SIZE() {
@@ -68,7 +70,7 @@ public class ConnectionPool {
     }
 
     public void setFreeConnections() {
-        for(int i = 0; i < getPOOL_SIZE(); i++){
+        for (int i = 0; i < getPOOL_SIZE(); i++) {
             freeConnections.add(new Connection());
         }
     }

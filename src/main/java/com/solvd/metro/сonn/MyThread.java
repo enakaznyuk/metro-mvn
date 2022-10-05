@@ -1,4 +1,4 @@
-package com.solvd.metro.Conn;
+package com.solvd.metro.сonn;
 
 public class MyThread extends Thread {
 

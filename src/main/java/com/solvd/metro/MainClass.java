@@ -1,8 +1,8 @@
 package com.solvd.metro;
 
-import com.solvd.metro.Conn.ClientThread;
-import com.solvd.metro.Conn.Connection;
-import com.solvd.metro.Conn.ConnectionPool;
+import com.solvd.metro.сonn.ClientThread;
+import com.solvd.metro.сonn.Connection;
+import com.solvd.metro.сonn.ConnectionPool;
 import com.solvd.metro.equip.Equip;
 import com.solvd.metro.equip.EquipForCleaner;
 import com.solvd.metro.equip.EquipForEngineer;
@@ -33,7 +33,6 @@ import org.apache.logging.log4j.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 public class MainClass {
 
@@ -240,9 +239,7 @@ public class MainClass {
 
         ///////////////////////////////////////////////////////////////
 
-        ConnectionPool connectionPool = ConnectionPool.getInstance(2);
-        connectionPool.setFreeConnections();
-
+        ConnectionPool connectionPool = ConnectionPool.getInstance(4);
 
         ClientThread ct1 = new ClientThread();
 
@@ -255,10 +252,19 @@ public class MainClass {
                     break;
                 } else {
                     LOGGER.info("No thread for you, sorry!");
-                    pause(2);
+                    Connection.pause(2);
                 }
             }
         }).start();
+
+        for(int i = 0; i < 20; i++){
+            new Thread(() -> {
+                Connection connection = connectionPool.getConnection();
+                connection.startWork();
+                ConnectionPool.getInstance().returnConnection(connection);
+            }).start();
+
+        }
 
 
         Runnable r = () -> {
@@ -270,7 +276,7 @@ public class MainClass {
                     break;
                 } else {
                     LOGGER.info("No thread for you, sorry!");
-                    pause(2);
+                    Connection.pause(2);
                 }
             }
         };
@@ -284,7 +290,7 @@ public class MainClass {
                     break;
                 } else {
                     LOGGER.info("No thread for you, sorry!");
-                    pause(2);
+                    Connection.pause(2);
                 }
             }
         };
@@ -298,12 +304,12 @@ public class MainClass {
                     break;
                 } else {
                     LOGGER.info("No thread for you, sorry!");
-                    pause(2);
+                    Connection.pause(1);
                 }
             }
         });
         try {
-            threadOne.get(1, TimeUnit.SECONDS);
+            threadOne.get(10, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new RuntimeException(e);
         }
@@ -323,7 +329,7 @@ public class MainClass {
 
 
         CompletableFuture<String> threadTwo = CompletableFuture.supplyAsync(() -> {
-            pause(2);
+            Connection.pause(2);
             return "1234";
         }).thenApplyAsync(p -> {
             return "4321";
@@ -340,7 +346,7 @@ public class MainClass {
                         break;
                     } else {
                         LOGGER.info("No thread for you, sorry!");
-                        pause(2);
+                        Connection.pause(2);
                     }
                 }
             }).start();
@@ -348,7 +354,7 @@ public class MainClass {
 
         //////////////////////////////////////
 
-        XmlCreater.xmlWork(metro);
+        /*XmlCreater.xmlWork(metro);
 
         boolean b = XsdCheck.checkXMLForXSD("D:/Java/Courses/metro-maven/src/main/resources/metro.xml", "D:/Java/Courses/metro-maven/src/main/resources/schememetro.xsd");
         System.out.println("XML = XSD : " + b);
@@ -387,11 +393,10 @@ public class MainClass {
             jaxbMarshaller.marshal(metroMinsk, System.out);
 
         } catch (JAXBException e) {
-            //e.printStackTrace();
             LOGGER.error(e);
-        }
+        }*/
 
-        try {
+        /*try {
 
             JAXBContext jaxbContextOne = JAXBContext.newInstance(MetroJaxB.class);
             Unmarshaller jaxbUnmarshaller = jaxbContextOne.createUnmarshaller();
@@ -400,15 +405,6 @@ public class MainClass {
             MetroJaxB MetroJaxB = (MetroJaxB) jaxbUnmarshaller.unmarshal(XMLfile);
         } catch (JAXBException e) {
             e.printStackTrace();
-        }
-    }
-
-
-    private static void pause(int seconds) {
-        try {
-            Thread.sleep(seconds * 1000L);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        }*/
     }
 }

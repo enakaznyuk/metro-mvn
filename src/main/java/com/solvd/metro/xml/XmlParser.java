@@ -65,7 +65,6 @@ public class XmlParser implements IPars {
             result.setStations(stationList);
         }catch (ParserConfigurationException | SAXException | IOException e){
             LOGGER.error(e);
-            //e.printStackTrace();
         }
         return result;
     }

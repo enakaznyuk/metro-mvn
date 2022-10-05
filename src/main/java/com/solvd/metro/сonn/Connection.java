@@ -1,4 +1,4 @@
-package com.solvd.metro.Conn;
+package com.solvd.metro.сonn;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,8 +30,14 @@ public class Connection {
     public void startWork(){
         LOGGER.info("Input number");
         read();
-        //update();
-        //delete();
-        //save();
+        pause(1);
+    }
+
+    public static void pause(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000L);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

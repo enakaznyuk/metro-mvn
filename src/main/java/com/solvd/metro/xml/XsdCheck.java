@@ -6,6 +6,8 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+
+import com.solvd.metro.file.WorkWithFile;
 import org.xml.sax.SAXException;
 
 public class XsdCheck {

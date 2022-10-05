@@ -18,7 +18,7 @@ import java.util.Map;
 @XmlType(propOrder = {"name", "dateBasis"})
 public class Station implements /*IMajorRenovation,*/ IWork<Station> {
 
-    private static final Logger LOGGER = LogManager.getLogger(Station.class);
+        private static final Logger LOGGER = LogManager.getLogger(Station.class);
 
     private String name;
     private LocalDate dateBasis;
